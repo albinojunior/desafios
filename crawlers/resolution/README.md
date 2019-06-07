@@ -5,6 +5,10 @@
 ## Prerequisites/Dependencies
 
 - Requires node and npm installed
+- Install node dependencies
+```bash
+ npm install
+```
 
 ## Running
 
