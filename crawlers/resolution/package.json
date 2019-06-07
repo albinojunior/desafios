@@ -1,0 +1,17 @@
+{
+  "name": "scraper-reddits-bot",
+  "version": "1.0.0",
+  "description": "crawler/scraper of reddits from telegram bot: https://t.me/idwall_reddits_albinojunior_bot.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node telegram-bot.js"
+  },
+  "author": "Jose Albino Junior",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "node-telegram-bot-api": "^0.30.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
