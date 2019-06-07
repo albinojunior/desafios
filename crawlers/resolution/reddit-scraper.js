@@ -10,31 +10,40 @@ const RedditScrapper = async (redditsList, upscore = 5000, top = 5) => {
   for (reddit of reddits) {
     results[reddit] = [];
     const attribs = ["subreddit", "url", "score"];
-    const url = `${REDDIT_URL}/r/${reddit}/top/?sort=top&t=all`;
-    const { body, request } = await rp(url, { resolveWithFullResponse: true });
 
-    if (request.uri.pathname.includes("subreddits/search")) {
+    try {
+      const url = `${REDDIT_URL}/r/${reddit}/top/?sort=top&t=all`;
+      const { body, request } = await rp(url, {
+        resolveWithFullResponse: true
+      });
+
+      if (request.uri.pathname.includes("subreddits/search")) {
+        results.notfound.push(reddit);
+        continue;
+      }
+
+      const $ = cheerio.load(body);
+
+      $("#siteTable div.thing").each((i, elm) => {
+        if (i > parseInt(top) - 1) return; //limit of top list
+        const thread = {};
+
+        attribs.map(attrib => (thread[attrib] = elm.attribs[`data-${attrib}`]));
+
+        if (!thread.url.includes("https://")) {
+          thread.url = REDDIT_URL + thread.url;
+        }
+
+        thread.permalink = REDDIT_URL + elm.attribs["data-permalink"];
+        thread.title = $(`#${elm.attribs.id} a.title`).text();
+
+        results[reddit].push(thread);
+      });
+
+    } catch (err) {
       results.notfound.push(reddit);
       continue;
     }
-
-    const $ = cheerio.load(body);
-
-    $("#siteTable div.thing").each((i, elm) => {
-      if (i > parseInt(top) - 1) return; //limit of top list
-      const thread = {};
-
-      attribs.map(attrib => (thread[attrib] = elm.attribs[`data-${attrib}`]));
-
-      if (!thread.url.includes("https://")) {
-        thread.url = REDDIT_URL + thread.url;
-      }
-
-      thread.permalink = REDDIT_URL + elm.attribs["data-permalink"];
-      thread.title = $(`#${elm.attribs.id} a.title`).text();
-
-      results[reddit].push(thread);
-    });
 
     results[reddit] = results[reddit].filter(
       thread => parseInt(thread.score) >= parseInt(upscore)

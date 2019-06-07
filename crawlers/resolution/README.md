@@ -1,6 +1,6 @@
 # Resolução do Desafio 2: Crawlers
 
-- Telegram Bot: https://t.me/idwall_reddits_albinojunior_bot
+- Telegram Bot: https://t.me/idwall_reddit_albinojr_bot
 
 ## Prerequisites/Dependencies
 
@@ -16,5 +16,13 @@ node scraper-cli.js askreddit;worldnews;programming
 ```
 
 ### Telegram Bot
+```bash
+npm start
+```
 
--
+- Start conversation
+
+```
+/NadaPraFazer [subreddits separate with ";"] [--upscore=value (default: 5000)] [--top=value (default: 5)]
+```
+Ex: /NadaPraFazer programming;technology --upscore=2000 --top=10
